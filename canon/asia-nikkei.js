@@ -5,7 +5,7 @@ import { shortDateTime } from '../static/datetime.js';
 const sourceFeed = 'https://asia.nikkei.com/rss/feed/nar';
 const sourceLabel = 'NIKKEI';
 const cacheId = 'nikkei-cache';
-const cacheMinutes = 120;
+const cacheMinutes = 150;
 const feedLength = 8;
 
 const matchCanonRegex = feeding.wordMatchRegex('canon');

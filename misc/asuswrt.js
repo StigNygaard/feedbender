@@ -12,7 +12,7 @@ const sourceFeed = 'https://www.snbforums.com/forums/51/index.rss?order=post_dat
 // const sourceFeed = 'https://www.snbforums.com/forums/asuswrt-official.51/index.rss?order=post_date'; // same as above
 const sourceLabel = 'ASUSWRTFORUM';
 const cacheId = 'asuswrt-cache';
-const cacheMinutes = 120;
+const cacheMinutes = 150;
 const feedLength = 6;
 
 const matchAx88uRegex = feeding.wordMatchRegex('rt-ax88u');
