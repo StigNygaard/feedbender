@@ -77,24 +77,19 @@ async function feedItems() {
         console.log(` 🌟 ${finalItems?.length - lengthOfCachedItems} new thread(s) was added to the ${sourceLabel} feed!`);
     }
     if (finalItems.length) {
-        if (feeding.arraysDiffers(finalItems, cached?.cachedItems)) {
-            let cached = {};
-            try {
-                cached = await caching.set(cacheId, {
-                    cachedTime: feedRequestTime,
-                    cachedItems: finalItems.slice(0, feedLength)
-                });
-            } catch (err) {
-                console.error(` 💣 Error when trying to update cache for ${sourceLabel}!`, err);
-            }
-            if (cached?.ok) {
-                console.log(` 🤖 Cache for ${sourceLabel} was ${sourceItems?.length ? 'updated' : '"extended"'}. ${cached.info}.`);
-            } else {
-                console.warn(` 💣 Failed updating cache for ${sourceLabel}!`)
-            }
+        let cached = {};
+        try {
+            cached = await caching.set(cacheId, {
+                cachedTime: feedRequestTime,
+                cachedItems: finalItems.slice(0, feedLength)
+            });
+        } catch (err) {
+            console.error(` 💣 Error when trying to update cache for ${sourceLabel}!`, err);
+        }
+        if (cached?.ok) {
+            console.log(` 🤖 Cache for ${sourceLabel} was ${sourceItems?.length ? 'updated' : '"extended"'}. ${cached.info}.`);
         } else {
-            // temp log unnecessary write skipped
-            console.info(`SKIPPED UNNECESSARY CACHE WRITE for ${sourceLabel}.`)
+            console.warn(` 💣 Failed updating cache for ${sourceLabel}!`)
         }
     }
     return finalItems;
