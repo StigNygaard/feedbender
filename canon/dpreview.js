@@ -9,8 +9,8 @@ const cacheMinutes = 120;
 const feedLength = 12;
 
 const matchCanonRegex = feeding.wordMatchRegex('Canon', 'u');
-const matchRFSRegex = feeding.wordMatchRegex('RF-S', 'u');
-const matchRFRegex = feeding.wordMatchRegex('RF', 'u');
+const matchRFRegex = feeding.wordMatchRegex('RF', 'u'); // also matches "RF-S"?
+const matchEOSRegex = feeding.wordMatchRegex('EOS', 'u');
 const matchAmazonRegex = feeding.wordMatchRegex('Amazon', 'u'); // unwanted
 const matchBHRegex = feeding.wordMatchRegex('B&H', 'u'); // unwanted
 
@@ -59,13 +59,13 @@ function filteredItemList(items, maxLength = feedLength) {
     for (const item of items) {
         if (item.categories?.some(category => matchCanonRegex.test(category.name))
             || matchCanonRegex.test(item.title ?? '')
-            || matchRFSRegex.test(item.title ?? '')
             || matchRFRegex.test(item.title ?? '')
+            || matchEOSRegex.test(item.title ?? '')
             || matchCanonRegex.test(item.description ?? '')
-            || matchRFSRegex.test(item.description ?? '')
             || matchRFRegex.test(item.description ?? '')
-            || matchRFSRegex.test(item.content?.encoded?.substring(0,8000) ?? '')
+            || matchEOSRegex.test(item.description ?? '')
             || matchRFRegex.test(item.content?.encoded?.substring(0,8000) ?? '')
+            || matchEOSRegex.test(item.content?.encoded?.substring(0,8000) ?? '')
         ) {
             if (!isUnwanted(item)) {
                 if (filteredList.length < maxLength) filteredList.push(item);
