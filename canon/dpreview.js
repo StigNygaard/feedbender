@@ -8,9 +8,9 @@ const cacheId = 'dpr-cache';
 const cacheMinutes = 120;
 const feedLength = 12;
 
-const matchCanonRegex = feeding.wordMatchRegex('canon', 'iu');
+const matchCanonRegex = feeding.wordMatchRegex('Canon', 'u');
 const matchRFSRegex = feeding.wordMatchRegex('RF-S', 'u');
-const matchRFRegex = feeding.wordMatchRegex('RF-mount', 'u');
+const matchRFRegex = feeding.wordMatchRegex('RF', 'u');
 const matchAmazonRegex = feeding.wordMatchRegex('Amazon', 'u'); // unwanted
 const matchBHRegex = feeding.wordMatchRegex('B&H', 'u'); // unwanted
 
@@ -64,8 +64,8 @@ function filteredItemList(items, maxLength = feedLength) {
             || matchCanonRegex.test(item.description ?? '')
             || matchRFSRegex.test(item.description ?? '')
             || matchRFRegex.test(item.description ?? '')
-            || matchRFSRegex.test(item.content?.encoded ?? '')
-            || matchRFRegex.test(item.content?.encoded ?? '')
+            || matchRFSRegex.test(item.content?.encoded?.substring(0,8000) ?? '')
+            || matchRFRegex.test(item.content?.encoded?.substring(0,8000) ?? '')
         ) {
             if (!isUnwanted(item)) {
                 if (filteredList.length < maxLength) filteredList.push(item);
