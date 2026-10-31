@@ -9,6 +9,8 @@ const cacheMinutes = 150;
 const feedLength = 12;
 
 const matchCanonRegex = feeding.wordMatchRegex('canon');
+const matchNikonRegex = feeding.wordMatchRegex('nikon');
+const matchSonyRegex = feeding.wordMatchRegex('sony');
 
 /**
  * Unwanted categories of posts to be ignored (lowercase)
@@ -18,6 +20,12 @@ const skipCategories = [
     'deals',
     'amazon'
 ];
+
+function hasUnwantedContent(item) {
+    // Probably unwanted if mentions Nikon or Sony, But *not* Canon...
+    return (matchNikonRegex.test(item.description) || matchSonyRegex.test(item.description))
+        && !matchCanonRegex.test(item.description);
+}
 
 /**
  * Returns if a post/item belongs to some unwanted category
@@ -48,7 +56,7 @@ function filteredItemList(items, maxLength = feedLength) {
     const filteredList = [];
     for (const item of items) {
         if (item.categories?.some(category => matchCanonRegex.test(category.name))) {
-            if (!inUnwantedCategory(item)) {
+            if (!(inUnwantedCategory(item) || hasUnwantedContent(item))) {
                 if (filteredList.length < maxLength) filteredList.push(item);
             }
         }
