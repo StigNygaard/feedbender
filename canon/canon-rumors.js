@@ -23,10 +23,10 @@ const unwantedCategories = [
     'featured deal',
     'exclusive deals',
     'prime day',
+    'black friday',
     'buyers guide',
     'buying guide',
     'smart picks',
-    'third party software',
     'third party cameras'
     // 'canon reviews', // What I have seen is not really reviews, but more spec. analysis or comparisons
 ];
@@ -35,7 +35,8 @@ const conditionalCategories = [
     'industry news',
     'industry rumors',
     'business general',
-    'third party lenses' // also count "aps-c" as a "canon reference"?
+    'third party lenses', // also count "aps-c" as a "canon reference"?
+    'third party software'
     // 'from the vault' // Do I want to exclude this?
 ];
 
@@ -43,7 +44,7 @@ const stopWord = [
     feeding.wordMatchRegex('terramaster'),
     feeding.wordMatchRegex('amazon'),
     feeding.wordMatchRegex('b&h')
-]
+];
 
 /**
  * Return if item is unwanted
@@ -56,9 +57,14 @@ function isUnwanted(item) {
         return unwantedCategories.some(unwantedCategory => item.categories.some(cat => cat.name.trim().toLowerCase().includes(unwantedCategory)));
     }
 
+    function canonReference(str) {
+        return matchCanonRegex.test(str) || matchEosRegex.test(str) || matchRfRegex.test(str);
+    }
+
     function unwantedConditional(item) {
-        const title = item.title?.toLowerCase() ?? '';
-        const hasCanonReference = matchCanonRegex.test(title) || matchEosRegex.test(title) || matchRfRegex.test(title) || matchEfRegex.test(title);
+        const title = item.title ?? '';
+        const description = item.description ?? '';
+        const hasCanonReference = canonReference(title) || canonReference(description);
         // console.log(`"${item.title}" hasCanonReference=${hasCanonReference}`);
         return conditionalCategories.some(conditionalCategory => item.categories.some(cat => cat.name.trim().toLowerCase().includes(conditionalCategory) && !hasCanonReference));
     }
