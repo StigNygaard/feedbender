@@ -17,7 +17,7 @@ const matchEfRegex = feeding.wordMatchRegex('ef');
  * Unwanted categories of posts to be ignored (lowercase)
  * @type {string[]}
  */
-const skipCategories = [
+const unwantedCategories = [
     'deal zone',
     'dealzone',
     'featured deal',
@@ -27,38 +27,48 @@ const skipCategories = [
     'buying guide',
     'smart picks',
     'third party software',
-    'third party lenses',
-    'industry news', // (can also be 'featured...')
-    'industry rumors' // (can also be 'featured...')
-    // 'canon reviews', // what I have seen is not really reviews
-    // 'from the vault' // do I want to exclude this?
+    'third party cameras'
+    // 'canon reviews', // What I have seen is not really reviews, but more spec. analysis or comparisons
 ];
 
+const conditionalCategories = [
+    'industry news',
+    'industry rumors',
+    'business general',
+    'third party lenses' // also count "aps-c" as a "canon reference"?
+    // 'from the vault' // Do I want to exclude this?
+];
+
+const stopWord = [
+    feeding.wordMatchRegex('terramaster'),
+    feeding.wordMatchRegex('amazon'),
+    feeding.wordMatchRegex('b&h')
+]
+
 /**
- * Returns if a post/item belongs to some unwanted category
+ * Return if item is unwanted
  * @param item {Object}
  * @returns {boolean}
  */
-function inUnwantedCategory(item) {
-    const categories = item.categories;
-    const title = item.title?.toLowerCase() ?? '';
-    const hasCanonReference = matchCanonRegex.test(title) || matchEosRegex.test(title) || matchRfRegex.test(title) || matchEfRegex.test(title) ||
-        categories.some(category => {
-            const cat = category.name.trim().toLowerCase();
-            return matchCanonRegex.test(cat); // || matchEosRegex.test(cat) || matchRfRegex.test(cat) || matchEfRegex.test(cat);
-        });
-    let unwanted = false;
-    for (const category of categories) {
-        const categoryName = category.name.trim().toLowerCase();
-        // Also - in most cases - unwanted if just a "substring" of the category-name matches a skipCategory:
-        if (skipCategories.some(skipCategory => categoryName.includes(skipCategory))) {
-            // Unwanted - except if it is a "featured industry..." or "third party..." category combined with a Canon reference:
-            unwanted ||= !(
-                categoryName.includes('industry news') && hasCanonReference ||
-                categoryName.includes('third party') && hasCanonReference
-            ); // TODO fix bad logic here!?
-        }
+function isUnwanted(item) {
+
+    function unwantedCategory(item) {
+        return unwantedCategories.some(unwantedCategory => item.categories.some(cat => cat.name.trim().toLowerCase().includes(unwantedCategory)));
     }
+
+    function unwantedConditional(item) {
+        const title = item.title?.toLowerCase() ?? '';
+        const hasCanonReference = matchCanonRegex.test(title) || matchEosRegex.test(title) || matchRfRegex.test(title) || matchEfRegex.test(title);
+        // console.log(`"${item.title}" hasCanonReference=${hasCanonReference}`);
+        return conditionalCategories.some(conditionalCategory => item.categories.some(cat => cat.name.trim().toLowerCase().includes(conditionalCategory) && !hasCanonReference));
+    }
+
+    function hasStopWord(item) {
+        return stopWord.some(stop => stop.test(item.title ?? ''));
+    }
+
+    let unwanted = unwantedCategory(item) || unwantedConditional(item) || hasStopWord(item);
+    // console.log(`"${item.title}" is unwanted=${unwanted}`);
     return unwanted;
 }
 
@@ -71,7 +81,7 @@ function inUnwantedCategory(item) {
 function filteredItemList(items, maxLength = feedLength) {
     const filteredList = [];
     for (const item of items) {
-        if (!inUnwantedCategory(item)) {
+        if (!isUnwanted(item)) {
             if (filteredList.length < maxLength) filteredList.push(item);
         }
     }
