@@ -11,7 +11,7 @@ const feedLength = 12;
 const matchCanonRegex = feeding.wordMatchRegex('canon');
 const matchEosRegex = feeding.wordMatchRegex('eos');
 const matchRfRegex = feeding.wordMatchRegex('rf');
-const matchEfRegex = feeding.wordMatchRegex('ef');
+// const matchEfRegex = feeding.wordMatchRegex('ef');
 
 /**
  * Unwanted categories of posts to be ignored (lowercase)

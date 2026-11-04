@@ -64,8 +64,8 @@ function filteredItemList(items, maxLength = feedLength) {
             || matchCanonRegex.test(item.description ?? '')
             || matchRFRegex.test(item.description ?? '')
             || matchEOSRegex.test(item.description ?? '')
-            || matchRFRegex.test(item.content?.encoded?.substring(0,8000) ?? '')
-            || matchEOSRegex.test(item.content?.encoded?.substring(0,8000) ?? '')
+            || matchRFRegex.test(item.content?.encoded?.substring(0,5000) ?? '')
+            || matchEOSRegex.test(item.content?.encoded?.substring(0,5000) ?? '')
         ) {
             if (!isUnwanted(item)) {
                 if (filteredList.length < maxLength) filteredList.push(item);
