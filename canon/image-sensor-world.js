@@ -101,7 +101,7 @@ export async function isWorld(feedType, reqHeaders, info, logging = false) {
         `${feeding.DeployedAt}/canon/iswfeed.${feedType}`,
         'https://image-sensors-world.blogspot.com/',
         'Image Sensor World',
-        'https://www.feedish.stignygaard.deno.net/favicon-32x32.png', // because I don't have anything better to use right now // TODO ?
+        'https://feedbender.com/favicon-32x32.png', // because I don't have anything better to use right now // TODO ?
         'daily',
         3 // every eight hours
     );

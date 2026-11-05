@@ -90,7 +90,7 @@ export async function opticalLimits(feedType, reqHeaders, info, logging = false)
         `${feeding.DeployedAt}/canon/optlimitsfeed.${feedType}`,
         'https://opticallimits.com/',
         'OpticalLimits',
-        'https://www.feedish.stignygaard.deno.net/favicon-32x32.png', // TODO ? https://opticallimits.com/wp-content/uploads/2024/06/logo_sx.png - https://opticallimits.com/favicon.ico
+        'https://feedbender.com/favicon-32x32.png', // TODO ? https://opticallimits.com/wp-content/uploads/2024/06/logo_sx.png - https://opticallimits.com/favicon.ico
         'daily',
         4 // every six hours
     );

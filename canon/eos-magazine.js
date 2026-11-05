@@ -115,7 +115,7 @@ export async function eosMagazine(feedType, reqHeaders, info, logging = false) {
         `${feeding.DeployedAt}/canon/eosmagfeed.${feedType}`,
         'https://eos-magazine-news.blogspot.com/',
         'EOS Magazine',
-        'https://www.feedish.stignygaard.deno.net/canon/eosmag1024.png',
+        'https://feedbender.com/canon/eosmag1024.png',
         'daily',
         4 // every six hours
     );

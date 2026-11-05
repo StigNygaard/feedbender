@@ -1,10 +1,10 @@
 import { parseRssFeed, parseRdfFeed, generateJsonFeed, generateRssFeed } from 'feedsmith';
 import { DomParser } from '@thednp/domparser';
 
-const corsAllowHostnames = Deno.env.get('feedish_cors_allow_hostnames')?.toLowerCase()?.split(/\s*(?:[,;]|$)\s*/) ?? [];
+const corsAllowHostnames = Deno.env.get('feedbender_cors_allow_hostnames')?.toLowerCase()?.split(/\s*(?:[,;]|$)\s*/) ?? [];
 const parser = DomParser();
-export const DeployedAt = 'https://feedish.stignygaard.deno.net'; // TODO Or via env?
-export const fetcherUserAgent = Deno.env.get('feedish_fetcher_useragent');
+export const DeployedAt = 'https://feedbender.com'; // TODO Or via env?
+export const fetcherUserAgent = Deno.env.get('feedbender_fetcher_useragent');
 const feedFetcherHeaders = new Headers({});
 if (fetcherUserAgent) {
     feedFetcherHeaders.set('User-Agent', fetcherUserAgent);
@@ -386,7 +386,7 @@ export function getCreateFeedTool(feedType, feedTitle, feedDescription, feedUrl,
                         }]
                     },
                     language: 'en-US',
-                    generator: 'https://feedish.stignygaard.deno.net/',
+                    generator: 'https://feedbender.com/',
                     sy: {
                         updatePeriod: updatePeriod,
                         updateFrequency: updateFrequency

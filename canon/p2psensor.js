@@ -101,7 +101,7 @@ export async function p2pSensor(feedType, reqHeaders, info, logging = false) {
         `${feeding.DeployedAt}/canon/p2psensorfeed.${feedType}`,
         'https://www.photonstophotos.net/',
         'Photons to Photos',
-        'https://www.feedish.stignygaard.deno.net/favicon-32x32.png', // because I don't have anything better to use right now // TODO ?
+        'https://feedbender.com/favicon-32x32.png', // because I don't have anything better to use right now // TODO ?
         'daily',
         4 // every six hours
     );

@@ -75,9 +75,9 @@ async function handler(req, info) {
 
     function skipLog(req) {
         return /\.[a-zA-Z]{2,3}$/.test(req.url) // skip logging files with 2-3 characters extension (a very quick filtering of log😉)
-            || ( // and got tired of this stupid client constant visiting...
-                req.url === 'https://feedish.stignygaard.deno.net:443/'
-                && req.headers?.get('referer') === 'http://feedish.stignygaard.deno.net'
+            || ( // and got tired of this stupid client constant visiting...  // TODO feedish->feedbender !????!...
+                req.url === 'https://feedbender.com:443/'
+                && req.headers?.get('referer') === 'http://feedbender.com'
                 && req.headers?.get('user-agent') === 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1'
             );
     }
