@@ -40,9 +40,18 @@ const eosmagPathPattern = new URLPattern({ pathname: "/canon/eosmagfeed.:type(js
 // MISC:
 const asuswrtPathPattern = new URLPattern({ pathname: "/misc/asuswrtfeed.:type(json|rss)" });
 
+const serveOptions = {};
+const servePort = Deno.env.get('feedbender_serve_port')?.trim();
+if (servePort?.length) {
+    serveOptions.port = Number.parseInt(servePort, 10);
+}
+const serveHostname = Deno.env.get('feedbender_serve_hostname')?.trim();
+if (serveHostname?.length) {
+    serveOptions.hostname = serveHostname;
+}
 
 // we could set a port-number with Deno.serve({port: portno}, handler);
-Deno.serve(handler);
+Deno.serve(serveOptions, handler);
 
 const now = new Date();
 // https://github.com/denoland/deploy_feedback/issues/705
