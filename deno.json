@@ -8,8 +8,7 @@
     "exclude": [
       "**/node_modules"
     ],
-    "include": [],
-    "entrypoint": "main.js"
+    "include": []
   },
   "imports": {
     "@std/dotenv": "jsr:@std/dotenv@^0.225.8",

@@ -1,5 +1,5 @@
-import * as feeding from './../util/feeding.js';
-import * as caching from './../util/caching.js';
+import * as feeding from '../util/feeding.js';
+import * as caching from '../util/caching.js';
 import { shortDateTime } from '../static/datetime.js';
 
 const sourceFeed = 'https://www.dpreview.com/feed/';

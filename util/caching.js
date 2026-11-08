@@ -1,5 +1,6 @@
+import '@std/dotenv/load';
 
-const kv = await Deno.openKv();
+const kv = await Deno.openKv(Deno.env.get('feedbender_kv_path')?.trim());
 
 export async function get(key) {
     if (!Array.isArray(key)) {
@@ -10,7 +11,7 @@ export async function get(key) {
 }
 
 /**
- * Set a value in the cache. Throws error if failing.
+ * Set a value. Throws error if failing.
  * @param key
  * @param value
  * @returns {Promise<Deno.KvCommitResult>}
@@ -21,11 +22,11 @@ export async function set(key, value) {
     }
     const jsonValue = JSON.stringify(value);
     if (jsonValue.length >= 32768) {
-        const err = `Cache value for key '${key}' is ${jsonValue.length} 'code units' long, and larger than allowed`;
+        const err = `Value for key '${key}' is ${jsonValue.length} 'code units' long, and larger than allowed`;
         console.error(err);
         throw new Error(err);
     }
     const retVal = await kv.set(key, JSON.stringify(value));
-    retVal.info = `String value of length ${jsonValue.length} is cached on key '${key}'`;
+    retVal.info = `String value of length ${jsonValue.length} is saved on key '${key}'`;
     return retVal;
 }
