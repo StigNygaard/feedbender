@@ -1,5 +1,5 @@
 {
   "processes": {
-    "web": "exec deno run --unstable-kv --allow-net --allow-env --allow-read=./static,./canon/static,./.env --allow-read=$feedbender_extra_read_permission --allow-write=$feedbender_extra_write_permission main.js"
+    "web": "exec deno run --unstable-kv --allow-net --allow-env --allow-read=./static,./canon/static,./.env --allow-read=$feedbender_extra_read_permissions --allow-write=$feedbender_extra_write_permissions main.js"
   }
 }
