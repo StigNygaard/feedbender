@@ -41,7 +41,7 @@ const eosmagPathPattern = new URLPattern({ pathname: "/canon/eosmagfeed.:type(js
 const asuswrtPathPattern = new URLPattern({ pathname: "/misc/asuswrtfeed.:type(json|rss)" });
 
 const serveOptions = {};
-const servePort = Deno.env.get('feedbender_serve_port')?.trim();
+const servePort = Deno.env.get('feedbender_serve_port')?.trim() || Deno.env.get('PORT')?.trim();
 if (servePort?.length) {
     serveOptions.port = Number.parseInt(servePort, 10);
 }
