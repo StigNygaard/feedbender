@@ -5,7 +5,7 @@ import { shortDateTime } from '../static/datetime.js';
 const sourceFeed = 'https://www.canonrumors.com/feed/';
 const sourceLabel = 'CRNEWS';
 const cacheId = 'cr-cache';
-const cacheMinutes = 90;
+const cacheMinutes = 60;
 const feedLength = 12;
 
 const matchCanonRegex = feeding.wordMatchRegex('canon');

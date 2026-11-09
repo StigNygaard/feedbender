@@ -5,7 +5,7 @@ import { shortDateTime } from '../static/datetime.js';
 const sourceFeed = 'https://www.cined.com/feed';
 const sourceLabel = 'CINED';
 const cacheId = 'cined-cache';
-const cacheMinutes = 150;
+const cacheMinutes = 120;
 const feedLength = 12;
 
 const matchCanonRegex = feeding.wordMatchRegex('canon');

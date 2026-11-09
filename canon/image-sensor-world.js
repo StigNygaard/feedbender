@@ -5,7 +5,7 @@ import { shortDateTime } from '../static/datetime.js';
 const sourceFeed = 'https://image-sensors-world.blogspot.com/feeds/posts/default?alt=rss';
 const sourceLabel = 'ISWORLD';
 const cacheId = 'isw-cache';
-const cacheMinutes = 240; // 4 hours
+const cacheMinutes = 180; // 3 hours
 const feedLength = 6;
 
 const matchCanonRegex = feeding.wordMatchRegex('canon');

@@ -5,7 +5,7 @@ import { shortDateTime } from '../static/datetime.js';
 const sourceFeed = 'https://eos-magazine-news.blogspot.com/feeds/posts/default?alt=rss';
 const sourceLabel = 'EOSMAG';
 const cacheId = 'eosmag-cache';
-const cacheMinutes = 150; // 2 hours
+const cacheMinutes = 120; // 2 hours
 const feedLength = 12;
 
 /**

@@ -5,7 +5,7 @@ import { shortDateTime } from '../static/datetime.js';
 const sourceFeed = 'https://www.dpreview.com/feed/';
 const sourceLabel = 'DPREVIEW';
 const cacheId = 'dpr-cache';
-const cacheMinutes = 120;
+const cacheMinutes = 90;
 const feedLength = 12;
 
 const matchCanonRegex = feeding.wordMatchRegex('Canon', 'u');
