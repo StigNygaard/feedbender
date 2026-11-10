@@ -14,6 +14,9 @@ const matchEOSRegex = feeding.wordMatchRegex('EOS', 'u');
 const matchAmazonRegex = feeding.wordMatchRegex('Amazon', 'u'); // unwanted
 const matchBHRegex = feeding.wordMatchRegex('B&H', 'u'); // unwanted
 
+const matchNikonRegex = feeding.wordMatchRegex('Nikon', 'u');
+const matchSonyRegex = feeding.wordMatchRegex('Sony', 'u');
+
 /**
  * Unwanted categories of posts to be ignored (lowercase)
  * @type {string[]}
@@ -41,6 +44,7 @@ function isUnwanted(item) {
         }
     }
     return( unwanted
+        || (matchNikonRegex.test(item.title ?? '') || matchSonyRegex.test(item.title ?? '')) && !matchCanonRegex.test(item.title ?? '')
         || matchAmazonRegex.test(item.title ?? '')
         || matchBHRegex.test(item.title ?? '')
         || matchAmazonRegex.test(item.description ?? '')
