@@ -121,9 +121,12 @@ async function feedItems() {
         relevantItems = tweakItems(filteredItemList(sourceItems));
     }
 
+    const extrasShouldBeOlderThan = relevantItems.at(-1)?.pubDate ? new Date(relevantItems.at(-1).pubDate) : new Date();
     for (const item of cachedItems) {
         if (!relevantItems.some(relevant => relevant.guid?.value === item.guid?.value)) {
-            relevantItems.push(item);
+            if (new Date(item.pubDate) < extrasShouldBeOlderThan) { // This check could be part of array filtering above!
+                relevantItems.push(item);
+            }
         }
     }
     if (relevantItems.length) {

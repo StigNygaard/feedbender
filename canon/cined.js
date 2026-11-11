@@ -111,7 +111,7 @@ async function feedItems() {
         relevantItems = tweakItems(filteredItemList(sourceItems));
     }
 
-    for (const item of cachedItems) {
+    for (const item of cachedItems) { // TODO: Add posttime check? See depreview.js (or dpreview-forum-all.js?)
         if (!relevantItems.some(relevant => relevant.guid?.value === item.guid?.value)) {
             relevantItems.push(item);
         }

@@ -35,9 +35,8 @@ function tweakItems(items) {
         // const desc = feeding.stripHtml(item.description ?? '').substring(0, 500);
         const regexp = /[.,([\s]+/gu;
         const allMatches = Array.from(desc.matchAll(regexp));
-        const last = allMatches.length - 1;
-        const lastMatch = allMatches[last];
-        item.description = desc.substring(0, lastMatch.index > 300 ? lastMatch.index : 500) + '...';
+        const lastMatch = allMatches.at(-1);
+        item.description = desc.substring(0, lastMatch?.index && (lastMatch.index > 300) ? lastMatch.index : 500) + '...';
     }
     return items;
 }
@@ -71,7 +70,7 @@ async function feedItems() {
         relevantItems = tweakItems(filteredItemList(sourceItems));
     }
 
-    for (const item of cachedItems) {
+    for (const item of cachedItems) { // TODO: Add posttime check? See depreview.js (or dpreview-forum-all.js?)
         if (!relevantItems.some(relevant => relevant.guid?.value === item.guid?.value)) {
             relevantItems.push(item);
         }
