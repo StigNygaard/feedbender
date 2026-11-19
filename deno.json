@@ -14,6 +14,6 @@
     "@std/dotenv": "jsr:@std/dotenv@^0.225.8",
     "@std/http": "jsr:@std/http@^1.1.4",
     "@thednp/domparser": "npm:@thednp/domparser@^0.2.0",
-    "feedsmith": "npm:feedsmith@^3.0.1"
+    "feedsmith": "npm:feedsmith@^3.1.0"
   }
 }
