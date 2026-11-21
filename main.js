@@ -200,6 +200,21 @@ async function handler(req, info) {
         if (!skipLog(req)) {
             console.log(` 👀 ${remoteAddr(info).remoteIp} - ${req.url} - Referer: ${req.headers?.get('referer') ?? '(none)'}\n - User-Agent: ${req.headers?.get('user-agent')}`);
         }
+
+
+        // If serveDir's "built-in" redirecting from /folder to /folder/ doesn't work,
+        // then fix that by intercepting paths before serveDir runs...
+        const hasFileExtension = urlObj.pathname.split("/").pop()?.includes(".");
+        if (!urlObj.pathname.endsWith("/") && !hasFileExtension) {
+            // Use the public domain forwarded by the reverse proxy
+            const publicHost = req.headers.get("x-forwarded-host") ?? req.headers.get("host") ?? urlObj.host;
+            const publicProto = req.headers.get("x-forwarded-proto") ?? urlObj.protocol?.slice(0, -1) ?? "https";
+            const redirectUrl = `${publicProto}://${publicHost}${urlObj.pathname}/${urlObj.search}`;
+            // This exits the handler with a new Response instructing the client/browser to make a new request to the corrected URL:
+            return Response.redirect(redirectUrl, 301);
+        }
+
+
         // console.log('responseHeadersArr: ', responseHeadersArr);
         return await serveDir(req, {
             urlRoot: '',

@@ -38,3 +38,10 @@ notes.txt
 node_modules
 dist
 .cache
+
+# AI, do I want to include stuff like this?
+.agents
+skills-lock.json
+AGENTS.md
+CLAUDE.md
+GEMINI.md
