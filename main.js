@@ -49,7 +49,7 @@ const serveHostname = Deno.env.get('feedbender_serve_hostname')?.trim();
 if (serveHostname?.length) {
     serveOptions.hostname = serveHostname;
 }
-const folderfix = ['true', '1', 'yes'].includes(Deno.env.get('feedbender_folderfix')?.trim().toLocaleLowerCase());
+const folderfix = ['true', '1', 'yes'].includes(Deno.env.get('feedbender_servedir_folderfix')?.trim().toLocaleLowerCase());
 
 // we could set a port-number with Deno.serve({port: portno}, handler);
 Deno.serve(serveOptions, handler);
