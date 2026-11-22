@@ -199,9 +199,8 @@ async function handler(req, info) {
 
         /* Static content */
         if (!skipLog(req)) {
-            console.log(` 👀 ${remoteAddr(info).remoteIp} - ${req.url} - Referer: ${req.headers?.get('referer') ?? '(none)'}\n - User-Agent: ${req.headers?.get('user-agent')}`);
-            // TODO TEMP...
-            console.log(` 👀 Request headers: `, req.headers);
+            console.log(` 👀 ${req.headers?.get('x-real-ip') ?? remoteAddr(info).remoteIp} - ${req.url} - Referer: ${req.headers?.get('referer') ?? '(none)'}\n - User-Agent: ${req.headers?.get('user-agent')}`);
+            // console.log(` 👀 Request headers: `, req.headers);
         }
         if (folderfix) {
             // If serveDir's "built-in" redirecting from /folder to /folder/ doesn't work - it might be using the internal
