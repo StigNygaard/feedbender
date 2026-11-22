@@ -49,6 +49,7 @@ const serveHostname = Deno.env.get('feedbender_serve_hostname')?.trim();
 if (serveHostname?.length) {
     serveOptions.hostname = serveHostname;
 }
+const folderfix = ['true', '1', 'yes'].includes(Deno.env.get('feedbender_folderfix')?.trim().toLocaleLowerCase());
 
 // we could set a port-number with Deno.serve({port: portno}, handler);
 Deno.serve(serveOptions, handler);
@@ -199,19 +200,22 @@ async function handler(req, info) {
         /* Static content */
         if (!skipLog(req)) {
             console.log(` 👀 ${remoteAddr(info).remoteIp} - ${req.url} - Referer: ${req.headers?.get('referer') ?? '(none)'}\n - User-Agent: ${req.headers?.get('user-agent')}`);
+            // TODO TEMP...
+            console.log(` 👀 Request headers: `, req.headers);
         }
-
-
-        // If serveDir's "built-in" redirecting from /folder to /folder/ doesn't work,
-        // then fix that by intercepting paths before serveDir runs...
-        const hasFileExtension = urlObj.pathname.split("/").pop()?.includes(".");
-        if (!urlObj.pathname.endsWith("/") && !hasFileExtension) {
-            // Use the public domain forwarded by the reverse proxy
-            const publicHost = req.headers.get("x-forwarded-host") ?? req.headers.get("host") ?? urlObj.host;
-            const publicProto = req.headers.get("x-forwarded-proto") ?? urlObj.protocol?.slice(0, -1) ?? "https";
-            const redirectUrl = `${publicProto}://${publicHost}${urlObj.pathname}/${urlObj.search}`;
-            // This exits the handler with a new Response instructing the client/browser to make a new request to the corrected URL:
-            return Response.redirect(redirectUrl, 301);
+        if (folderfix) {
+            // If serveDir's "built-in" redirecting from /folder to /folder/ doesn't work - it might be using the internal
+            // reverse-proxy hostname (like feedbender-eu.velixir.run) instead of your custom domain (www.feedbender.com) -
+            // then fix that by intercepting paths before serveDir runs...
+            const hasFileExtension = urlObj.pathname.split("/").pop()?.includes(".");
+            if (!urlObj.pathname.endsWith("/") && !hasFileExtension) {
+                // Use the public domain forwarded by the reverse proxy
+                const publicHost = req.headers.get("x-forwarded-host") ?? req.headers.get("host") ?? urlObj.host;
+                const publicProto = req.headers.get("x-forwarded-proto") ?? urlObj.protocol?.slice(0, -1) ?? "https";
+                const redirectUrl = `${publicProto}://${publicHost}${urlObj.pathname}/${urlObj.search}`;
+                // This exits the handler with a new Response instructing the client/browser to make a new request to the corrected URL:
+                return Response.redirect(redirectUrl, 301);
+            }
         }
 
 
