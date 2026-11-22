@@ -49,7 +49,7 @@ const serveHostname = Deno.env.get('feedbender_serve_hostname')?.trim();
 if (serveHostname?.length) {
     serveOptions.hostname = serveHostname;
 }
-const folderfix = ['true', '1', 'yes'].includes(Deno.env.get('feedbender_servedir_folderfix')?.trim().toLocaleLowerCase());
+const proxyfix = ['true', '1', 'yes'].includes(Deno.env.get('feedbender_behind_proxy')?.trim().toLocaleLowerCase());
 
 // we could set a port-number with Deno.serve({port: portno}, handler);
 Deno.serve(serveOptions, handler);
@@ -72,6 +72,10 @@ async function handler(req, info) {
         };
         responseHeadersArr = Object.entries(responseHeaders).map(([k, v]) => `${k}: ${v}`);
     }
+
+    // CAUTION! 'X-Real-IP' and 'X-Forwarded-For' can be spoofed by a client reaching backend directly...
+    const xForwardedFor = req.headers?.get('X-Forwarded-For')?.trim();
+    const xRealIP = req.headers?.get('X-Real-IP')?.trim();
 
     function remoteAddr(info) {
         if ('hostname' in info.remoteAddr) {
@@ -199,13 +203,13 @@ async function handler(req, info) {
 
         /* Static content */
         if (!skipLog(req)) {
-            console.log(` 👀 ${req.headers?.get('x-real-ip') ?? remoteAddr(info).remoteIp} - ${req.url} - Referer: ${req.headers?.get('referer') ?? '(none)'}\n - User-Agent: ${req.headers?.get('user-agent')}`);
+            console.log(` 👀 ${remoteAddr(info).remoteIp} ${proxyfix && xForwardedFor ? '(' + req.headers?.get('X-Forwarded-For') + ')' : ''} - ${req.url} - Referer: ${req.headers?.get('referer') ?? '(none)'}\n - User-Agent: ${req.headers?.get('user-agent')}`);
             // console.log(` 👀 Request headers: `, req.headers);
         }
-        if (folderfix) {
+        if (proxyfix) {
             // If serveDir's "built-in" redirecting from /folder to /folder/ doesn't work - it might be using the internal
             // reverse-proxy hostname (like feedbender-eu.velixir.run) instead of your custom domain (www.feedbender.com) -
-            // then fix that by intercepting paths before serveDir runs...
+            // then fix that by intercepting paths before serveDir runs:...
             const hasFileExtension = urlObj.pathname.split("/").pop()?.includes(".");
             if (!urlObj.pathname.endsWith("/") && !hasFileExtension) {
                 // Use the public domain forwarded by the reverse proxy
