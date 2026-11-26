@@ -7,7 +7,7 @@ export async function get(key) {
         key = [key];
     }
     const content = await kv.get(key);
-    return JSON.parse(content?.value ?? '[]');
+    return JSON.parse(content?.value ?? '{"cachedItems": []}');
 }
 
 /**

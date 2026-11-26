@@ -7,8 +7,9 @@ import {shortDateTime} from "../static/datetime.js";
 const sourceFeed = 'https://www.dpreview.com/forums/forums/-/index.rss?order=post_date';
 const sourceLabel = 'DPRFORUMALL';
 const cacheId = 'dprforumall-cache';
-const cacheMinutes = 180; // 60
+const cacheMinutes = 120; // 60
 const feedLength = 8; // 12
+const allowUsingZeroLengthCache = true; // TODO Set false when the cache has items (posts)
 
 
 /**
@@ -60,6 +61,7 @@ async function feedItems() {
     let cachedTime = new Date('2000-01-01');
     let finalItems = [];
     const cached = await caching.get(cacheId);
+    // console.log(' CACHED: ', cached);
     if (cached?.cachedTime) {
         cachedTime = new Date(cached.cachedTime);
     }
@@ -68,7 +70,7 @@ async function feedItems() {
     }
     // console.log(` 🤖 CACHED FORUM-CONTENT FROM ${cachedTime} WAS READ. There was ${finalItems?.length} cached items.`);
 
-    if (finalItems?.length && ((feedRequestTime.getTime() - cachedTime.getTime()) < (cacheMinutes * 60 * 1000))) {
+    if ((finalItems?.length || allowUsingZeroLengthCache) && ((feedRequestTime.getTime() - cachedTime.getTime()) < (cacheMinutes * 60 * 1000))) {
         console.log(` 🤖 For ${sourceLabel}, just use the recently updated (${shortDateTime(cachedTime,'shortOffset')}) CACHED ITEMS`);
         return finalItems;
     }
@@ -92,7 +94,7 @@ async function feedItems() {
     if (finalItems?.length > lengthOfCachedItems) {
         console.log(` 🌟 ${finalItems?.length - lengthOfCachedItems} new thread(s) was added to the ${sourceLabel} feed!`);
     }
-    if (finalItems.length) {
+    if (finalItems.length || allowUsingZeroLengthCache) {
         let cached = {};
         try {
             cached = await caching.set(cacheId, {

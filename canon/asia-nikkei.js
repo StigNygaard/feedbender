@@ -7,6 +7,7 @@ const sourceLabel = 'NIKKEI';
 const cacheId = 'nikkei-cache';
 const cacheMinutes = 150;
 const feedLength = 8;
+const allowUsingZeroLengthCache = true; // TODO Set false when the cache has items (posts)
 
 const matchCanonRegex = feeding.wordMatchRegex('canon');
 
@@ -72,7 +73,7 @@ async function feedItems() {
     }
     // console.log(` 🤖 CACHED CONTENT FROM ${cachedTime} WAS READ`);
 
-    if (cachedItems?.length && ((feedRequestTime.getTime() - cachedTime.getTime()) < (cacheMinutes * 60 * 1000))) {
+    if ((cachedItems?.length || allowUsingZeroLengthCache) && ((feedRequestTime.getTime() - cachedTime.getTime()) < (cacheMinutes * 60 * 1000))) {
         console.log(` 🤖 For ${sourceLabel}, just use the recently updated (${shortDateTime(cachedTime,'shortOffset')}) CACHED ITEMS`);
         return cachedItems;
     }
@@ -88,7 +89,7 @@ async function feedItems() {
             relevantItems.push(item);
         }
     }
-    if (relevantItems.length) {
+    if (relevantItems.length || allowUsingZeroLengthCache) {
         if (relevantItems.length > cachedItems.length) {
             console.log(` 🌟 New item(s) was added to the ${sourceLabel} feed at ${shortDateTime(new Date(), 'shortOffset')}!`);
         }
