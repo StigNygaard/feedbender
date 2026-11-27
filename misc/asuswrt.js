@@ -14,6 +14,7 @@ const sourceLabel = 'ASUSWRTFORUM';
 const cacheId = 'asuswrt-cache';
 const cacheMinutes = 150;
 const feedLength = 6;
+const allowUsingZeroLengthCache = true; // TODO Set false when the cache has items (posts)
 
 const matchAx88uRegex = feeding.wordMatchRegex('rt-ax88u');
 const matchBe88uRegex = feeding.wordMatchRegex('rt-be88u'); // The successor to the RT-AX88U
@@ -53,7 +54,7 @@ async function feedItems() {
     }
     // console.log(` 🤖 CACHED FORUM-CONTENT FROM ${cachedTime} WAS READ. There was ${finalItems?.length} cached items.`);
 
-    if (finalItems?.length && ((feedRequestTime.getTime() - cachedTime.getTime()) < (cacheMinutes * 60 * 1000))) {
+    if ((finalItems?.length || allowUsingZeroLengthCache) && ((feedRequestTime.getTime() - cachedTime.getTime()) < (cacheMinutes * 60 * 1000))) {
         console.log(` 🤖 For ${sourceLabel}, just use the recently updated (${shortDateTime(cachedTime,'shortOffset')}) CACHED ITEMS`);
         return finalItems;
     }
@@ -76,7 +77,7 @@ async function feedItems() {
     if (finalItems?.length > lengthOfCachedItems) {
         console.log(` 🌟 ${finalItems?.length - lengthOfCachedItems} new thread(s) was added to the ${sourceLabel} feed!`);
     }
-    if (finalItems.length) {
+    if (finalItems.length || allowUsingZeroLengthCache) {
         let cached = {};
         try {
             cached = await caching.set(cacheId, {

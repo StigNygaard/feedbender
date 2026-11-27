@@ -6,8 +6,11 @@ export async function get(key) {
     if (!Array.isArray(key)) {
         key = [key];
     }
+    /**
+     * @type {Deno.KvEntry<string> | {key: Deno.KvKey, value: null, versionstamp: null}}
+     */
     const content = await kv.get(key);
-    return JSON.parse(content?.value ?? '{"cachedItems": []}');
+    return content.value != null ? JSON.parse(content.value) : {"cachedItems": []};
 }
 
 /**
